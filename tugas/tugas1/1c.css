@@ -1,0 +1,58 @@
+.kotak1-pertama {
+    width: 50px;
+    height: 50px;
+    background-color: salmon;
+    border: 1px solid black;
+  }
+  
+  .kotak1-kedua {
+    width: 50px;
+    height: 50px;
+    background-color: salmon;
+    border: 1px solid black;
+  }
+  .kotak2-kedua {
+    width: 50px;
+    height: 50px;
+    background-color: salmon;
+    border: 1px solid black;
+  }
+  
+  .kotak1-ketiga {
+    width: 50px;
+    height: 50px;
+    background-color: salmon;
+    border: 1px solid black;
+  }
+  
+  .kotak2-ketiga {
+    width: 50px;
+    height: 50px;
+    background-color: salmon;
+    border: 1px solid black;
+  }
+  
+  .kotak3-ketiga {
+    width: 50px;
+    height: 50px;
+    background-color: salmon;
+    border: 1px solid black;
+  }
+  
+  .kotak-pertama {
+    text-align: center;
+    line-height: 50px;
+  }
+  
+  .kotak-kedua {
+    text-align: center;
+    line-height: 50px;
+    display: flex;
+  }
+  
+  .kotak-ketiga {
+    text-align: center;
+    line-height: 50px;
+    display: flex;
+  }
+ 
