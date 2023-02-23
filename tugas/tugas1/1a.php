@@ -9,7 +9,7 @@ $variable2 = "Bundar";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=<, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tugas1a</title>
 </head>
 <body>
     <h2>
@@ -18,7 +18,7 @@ $variable2 = "Bundar";
             saya 
             <?php echo "$variable2";?>, 
             <?php echo "$variable2";?> 
-            saya 
+            saya.
             <?php echo "$variable1";?>"
         </i>
     </h2>
