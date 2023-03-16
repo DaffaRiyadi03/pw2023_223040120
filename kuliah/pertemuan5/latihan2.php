@@ -24,5 +24,24 @@ $makanan = ['🍕','🍔','🍟','🌭','🍿'];
         <li><?= $makanan[$i]; ?></li>
         <?php } ?>
     </ul>
+
+    <br>
+
+    <h2>Daftar Bainatang</h2>
+    <ol>
+        <?php foreach($binatang as $bntng) { ?>
+        <li><?= $bntng; ?></li>
+        <?php } ?>
+        </ol>
+
+    <br>
+
+    <h2>Daftar Makanan</h2>
+    <ol>
+        <?php foreach($makanan as $mkn) { ?>
+        <li><?= $mkn; ?></li>
+        <?php } ?>
+    </ol>
+    
 </body>
 </html>
