@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="Login/style.css" />
+    <!-- Font Awesome -->
+    <script
+      src="https://kit.fontawesome.com/4f59f635f2.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <nav>
+      <div class="brand">
+        <a href=""><span>ST</span>ech Info</a>
+      </div>
+      <ul class="menu">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="#">Populer</a></li>
+        <li><a href="#">Terbaru</a></li>
+        <li><a href="#">Tentang</a></li>
+        <li><a href="login.html">Masuk</a></li>
+      </ul>
+
+      <!-- Search -->
+      <div class="search-box">
+        <input type="text" placeholder="Search..." />
+        <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+      </div>
+      <!-- Akhir Search -->
+    </nav>
+    <!-- Login -->
+    <div class="container">
+      <input type="checkbox" id="check" />
+      <div class="login form">
+        <header>Masuk</header>
+        <form action="#">
+          <input type="text" placeholder="Masukan Email" />
+          <input type="password" placeholder="Masukan password" />
+          <a href="#">Lupa password?</a>
+          <input type="button" value="Login" class="button" />
+        </form>
+        <div class="signup">
+          <span class="signup"
+            >Belum punya akun?
+            <label for="check">Daftar</label>
+          </span>
+        </div>
+      </div>
+      <!-- Daftar -->
+      <div class="regristration form">
+        <header>Daftar</header>
+        <form action="#">
+          <input type="text" placeholder="Masukan Email" />
+          <input type="password" placeholder="Masukan password" />
+          <input type="password" placeholder="Konfirmasi password" />
+          <a href="index.html"
+            ><input type="button" class="button" value="Daftar"
+          /></a>
+        </form>
+        <div class="signup">
+          <span class="signup">
+            Sudah punya akun?
+            <label for="check">Masuk </label>
+          </span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
