@@ -1,155 +1,53 @@
 * {
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
 }
 
-html {
-  background-color: #fff;
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: whitesmoke;
+}
+
+div {
+  display: block;
 }
 
 nav {
-  width: 100%;
-  background-color: #222831;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 40px;
+  background-color: white;
+  border-color: none;
+  position: relative;
+  font-size: 1.2 rem;
 }
 
-.menu {
-  display: flex;
-}
-
-.menu li a {
-  padding: 10px 25px;
-}
-
-nav .brand {
-  font-size: xx-large;
-  font-weight: bold;
-}
-
-nav .brand a {
-  color: white;
-  text-decoration: none;
-}
-
-nav .brand a span {
+nav a span {
   color: orange;
 }
 
-nav .menu li {
-  list-style: none;
+.jumbotron {
+  padding: 2rem 1rem;
+  margin: 10px 10px;
+  position: relative;
+  background: url("../image/BG-JUMBOTRON.jpg") center center;
+  width: auto;
+  height: auto;
+  background-size: cover;
+  overflow: hidden;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-nav .menu li a {
-  color: white;
-  text-decoration: none;
-  font-weight: 400px;
+.d-flex {
+  padding: 2rem 0rem;
 }
 
-nav .menu li:hover {
-  background-color: #384150;
+.display-4 {
+  text-align: center;
 }
 
-/* Search */
-.search-box {
-  background-color: rgb(58, 58, 58);
-  height: 18px;
-  padding: 7px 15px;
-  border-radius: 50px;
-}
-
-.search-box input {
-  border: none;
-  outline: none;
-  background: none;
-  width: 60px;
-}
-
-.search-box a {
-  color: white;
-}
-
-/* Post Konten */
-.container {
-  display: grid;
-  height: 30rem;
-  width: 75%;
-  margin-bottom: 4rem;
-  border-bottom: 2px solid black;
-  /* grid-template-columns: 2.5fr 1fr; */
-  gap: 1.5rem;
-  margin-left: 15px;
-  background: #eee;
-}
-
-.container .posts-container .post {
-  width: 100%;
-  padding: 2rem;
-  background: #fff;
-  border: var(--border);
-  border-radius: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.container .posts-container .post .image {
-  height: 15rem;
-  width: 15rem;
-  justify-content: center;
-  border-radius: 0.5rem;
-  object-fit: cover;
-}
-
-.container .posts-container .post .date {
-  padding-top: 2rem;
-  font-size: 1.2rem;
-  color: var(--orange);
-}
-
-.container .posts-container .post .title {
-  padding-top: 1.5rem;
-  color: var(--black);
-}
-
-.container .posts-container .post .text {
-  color: var(--light-color);
-  font-size: 1rem;
-  line-height: 1.7;
-  padding: 1rem 0;
-}
-
-.container .posts-container .links {
-  border-top: var(--border);
-  margin-top: 0.5rem;
-  padding-top: 1.5rem;
-  display: flex;
-  align-items: center;
-}
-
-.container .posts-container .links .user {
-  margin-right: auto;
-}
-
-.container .posts-container .links .icon {
-  padding-right: 0.9rem;
-}
-
-.container .posts-container .links a {
-  font-size: 1.2rem;
-  color: var(--light-color);
-}
-
-.container .posts-container .links a i {
-  padding-right: 0.2rem;
-  color: var(--black);
-}
-
-.container .posts-container .links a:hover {
-  color: var(--orange);
-}
-
-.container .posts-container .links a:hover i {
-  color: var(--orange);
+hr {
+  margin: 0 10px;
 }

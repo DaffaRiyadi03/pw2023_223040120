@@ -1,113 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <!-- Font Awesome -->
-    <script
-      src="https://kit.fontawesome.com/4f59f635f2.js"
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
-    ></script>
+    />
+    <!-- My CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <title>SearchTech</title>
   </head>
   <body>
-    <nav>
-      <div class="brand">
-        <a href=""><span>ST</span>ech Info</a>
-      </div>
-      <ul class="menu">
-        <li><a href="index.html">Beranda</a></li>
-        <li><a href="">Populer</a></li>
-        <li><a href="">Terbaru</a></li>
-        <li><a href="">Tentang</a></li>
-        <li><a href="login.html">Masuk</a></li>
-      </ul>
-
-      <!-- Search -->
-      <div class="search-box">
-        <input type="text" placeholder="Search..." />
-        <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-      </div>
-      <!-- Akhir Search -->
-    </nav>
-
-    <!-- Post Konten -->
-    <section class="container" id="posts">
-      <div class="posts-container">
-        <div class="post">
-          <img src="image/chatgpt.png" alt="ChatGPT" class="image" />
-          <div class="date">
-            <i class="far fa-clock"></i>
-            <span>Senin, 10 April 2023</span>
-          </div>
-          <h2 class="title">
-            AI Viral, Apa Itu Chat GPT? Bisa Dalam Bahasa Indonesia!
-          </h2>
-          <p class="text">
-            Kecerdasan buatan atau AI memang sedang hype akhir-akhir ini, bahkan
-            diprediksi akan merajai teknologi di masa depan. Chat GPT adalah
-            salah satu layanan AI yang sedang banyak digunakan saat ini, bahkan
-            dalam dunia crypto. Apa itu Chat GPT, bagaimana cara kerja dan
-            manfaatnya? Simak selengkapnya dalam artikel berikut ini!
-          </p>
-          <div class="links">
-            <a href="#" class="user">
-              <i class="far fa-user"></i>
-              <span>Iman Nur Salman</span>
-            </a>
-            <a href="#" class="icon">
-              <i class="far fa-comment"></i>
-              <span></span>
-            </a>
-            <a href="#" class="icon">
-              <i class="far fa-share-square"></i>
-              <span></span>
-            </a>
+    <!-- Navbar -->
+    <nav 
+    class="navbar navbar-expand-lg navbar-light"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="#"><span>D.R</span> Tech</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Beranda</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Populer</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Terbaru</a>
+            </li>
+            <li class="nav-item"></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"></a>
+            </li>
+          </ul>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="login.html"><button type="button" class="btn btn-outline-primary">Masuk</button></a>
+            <a href=""><button type="button" class="btn btn-outline-dark">Daftar</button></a>
           </div>
         </div>
+      </div>
+    </nav>
+    <!-- Akhir Navbar -->
 
-        <div class="posts-container">
-          <div class="post">
-            <img src="image/ai.jpeg" alt="ChatGPT" class="image" />
-            <div class="date">
-              <i class="far fa-clock"></i>
-              <span>Rabu, 3 Mei 2023
-              </span>
-            </div>
-            <h2 class="title">
-              AI Voice Generator: Masa Depan Teknologi Pendidikan
-            </h2>
-            <p class="text">
-              Siswa memanfaatkan smartphone, komputer, tablet, dan perangkat elektronik lainnya dalam berbagai setting setiap hari. Suara adalah komponen penting dan sumber keterlibatan siswa dalam saluran pembelajaran apa pun, termasuk YouTube, kursus, dll., yang telah mengubah cara orang memahami dan belajar saat ini.
+    <!-- Jumbotron -->
+    <section class="jumbotron text-center">
+      <h1 class="display-4 ms-auto">Hello, world!</h1>
+      <p class="lead">Jelajahi artikel mengenai teknologi disini!!</p>
+      <hr class="my-1" />
+      <form class="d-flex">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+    </section>
 
-              Pasar untuk kecerdasan buatan (AI) dalam pendidikan bernilai lebih dari $1 miliar pada tahun 2020, dan antara tahun 2021 dan 2027, diproyeksikan akan meningkat pada CAGR lebih dari 40%.
-              
-              Menurut Global Market Insights Inc., pasar untuk pendidikan AI dapat bernilai $20 miliar pada tahun 2027. AI telah muncul sebagai salah satu alat paling penting untuk mencapai tujuan menyatukan akses ke pendidikan di seluruh dunia dan untuk membantu tunanetra. .
-              
-              Generator suara yang digabungkan dengan AI akan membuat pembelajaran lebih mudah dibuat dan diakses. Ini memiliki potensi yang luar biasa untuk pertumbuhan dan kemajuan dalam pendidikan pendidikan modern.
-              
-              Di blog ini, kita akan membahas mengapa generator suara AI akan memainkan peran penting di masa depan pendidikan .
-            </p>
-            <div class="links">
-              <a href="#" class="user">
-                <i class="far fa-user"></i>
-                <span>Karen Janowitz, Jurnal Bisnis California
-                </span>
-              </a>
-              <a href="#" class="icon">
-                <i class="far fa-comment"></i>
-                <span></span>
-              </a>
-              <a href="#" class="icon">
-                <i class="far fa-share-square"></i>
-                <span></span>
-              </a>
-            </div>
+    <!-- Akhir Jumbotron -->
+
+    <br>
+
+    <hr>
+
+    <br>
+
+    <!-- Projects -->
+    <section id="projects">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <h2>Highlight</h2>
           </div>
+        </div>
+        <div class="container-card">
+  <div class="row">
+    <div class="col-sm-8">
+        <div class="row">
+            <div class="row-3">
+<div class="card mb-3" style="max-width: auto; max-height: 300px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="image/PHP.jpg" style="max-width: 100%; max-height: 100%;  " class="img-fluid rounded-start" alt="D.R Tech">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body" style="text-align: justify;">
+        <a href="#" style="text-decoration: none; color: black;"><h5 class="card-title" >
+            PHP Adalah Bagian dalam Bahasa Pemrograman, Ketahui Jenis-Jenisnya
+        </h5></a>
+        <p class="card-text">
+           PHP adalah singkatan rekursif untuk "PHP: Hypertext Preprocessor", yaitu bahasa pemrograman yang digunakan secara luas untuk penanganan pembuatan dan pengembangan sebuah situs web dan bisa digunakan bersamaan dengan HTML. PHP adalah bagian dari bahasa skrip, seperti JavaScript dan Phyton.
+        </p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-3" style="max-width: 850px; max-height: 280px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="image/CHAT-GPT.jpg" style="height: auto; width:auto" class="img-fluid rounded-start" alt="STech">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <a href="#" style="text-decoration: none; color: black;">
+            <h5 class="card-title ">AI Viral, Apa Itu Chat GPT? Bisa Dalam Bahasa Indonesia!</h5>
+        </a>
+        <p class="card-text" style="text-align: justify;">Chat GPT atau Generative Pre-training Transformer adalah kecerdasan buatan yang cara kerjanya memakai format percakapan. Kamu bisa memberi pertanyaan kepada jenis AI ini dan secara otomatis memperoleh jawaban dalam waktu singkat. </p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-3" style="max-width: 850px; max-height: 280px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="image/SAMSUNG.jpg" style="height: auto; width:auto" class="img-fluid rounded-start" alt="STech">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <a href="#" style="text-decoration: none; color: black;"><h5 class="card-title">
+            Samsung Akan Sematkan Teknologi Terbaru HP Ini, Lebih Canggih
+        </h5></a>
+        <p class="card-text" style="text-align: justify;">Samsung diam-diam tengah mengembangkan teknologi pengenalan wajah atau facial recognition lebih akurat. Konon, teknologi tersebut akan disematkan pada model Galaxy S23 Series.Kehadiran teknologi itu diperkuat setelah produsen elektronik asal Korea Selatan tersebut mengajukan hak paten di layanan Informasi Hak Kekayaan Intelektual Korea (KIPRIS) pada Maret 2021.</p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 1">
+      <div class="card" style="width: auto; border-color: none; border-radius: 2%;">
+        <h3 style="padding: 0 10px;">Populer</h3>
+        <img src="image/CHAT-GPT.jpg" style="" class="card-img-top" alt=". . .">
+        <div class="card-body">
+          <h6 class="card-title"><a href="#">
+           AI Viral, Apa Itu Chat GPT? Bisa Dalam Bahasa Indonesia!
+        </a></h6>
+          <p class="card-text" style="text-align: justify;">Chat GPT atau Generative Pre-training Transformer adalah kecerdasan buatan yang cara kerjanya memakai format percakapan. Kamu bisa memberi pertanyaan kepada jenis AI ini dan secara otomatis memperoleh jawaban dalam waktu singkat.</p>
+        </div>
+        <div class="card-body">
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
+    </div>
+  </div>
       </div>
     </section>
-  </body>
+    <!-- Akhir Projects -->
+
+    <!-- Footer -->
+    <div class="card">
+      <div class="card-body">
+        © 2023 Muhammad Daffa Riyadi . Hak cipta dilindungi.
+      </div>
+    </div>
   
+    <!-- AkhirFooter -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
