@@ -1,0 +1,60 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: whitesmoke;
+}
+
+div {
+  display: block;
+}
+
+nav {
+  background-color: white;
+  border-color: none;
+  position: fixed;
+  font-size: 1.2 rem;
+}
+
+nav a span {
+  color: orange;
+}
+
+.jumbotron {
+  padding: 2rem 1rem;
+  margin: 10px 10px;
+  position: relative;
+  background: url("../gambar/BG-JUMBOTRON.jpg") center center;
+  width: auto;
+  height: auto;
+  background-size: cover;
+  overflow: hidden;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.d-flex {
+  padding: 2rem 0rem;
+}
+
+.display-4 {
+  text-align: center;
+}
+
+hr {
+  margin: 0 10px;
+}
+
+.img-fluid rounded-start {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  display: block;
+}

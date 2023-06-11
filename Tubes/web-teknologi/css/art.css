@@ -19,7 +19,7 @@ div {
 nav {
   background-color: white;
   border-color: none;
-  position: relative;
+  position: fixed;
   font-size: 1.2 rem;
 }
 
@@ -27,19 +27,9 @@ nav a span {
   color: orange;
 }
 
-.jumbotron {
-  padding: 2rem 1rem;
-  margin: 10px 10px;
-  position: relative;
-  background: url("../image/BG-JUMBOTRON.jpg") center center;
-  width: auto;
-  height: auto;
-  background-size: cover;
-  overflow: hidden;
-  font-weight: 500;
-  font-family: Arial, Helvetica, sans-serif;
+div .container-fluid {
+  padding-bottom: 20px;
 }
-
 .d-flex {
   padding: 2rem 0rem;
 }
@@ -50,4 +40,15 @@ nav a span {
 
 hr {
   margin: 0 10px;
+}
+
+.img-fluid rounded-start {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  display: block;
+}
+
+footer .container-fluid {
+  background-color: white;
 }
