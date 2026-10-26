@@ -1,40 +1,44 @@
-<?php include("inc_header.php") ?>
-<?php 
-$sukses = "";
-$katakunci = (isset($_GET['katakunci'])) ? $_GET['katakunci'] : "";
-if (isset($_GET['op'])) {
-    $op = $_GET['op'];
-} else {
-    $op = "";
+<?php require 'inc_header.php'; ?>
+<?php
+$katakunci = trim($_GET['katakunci'] ?? '');
+$pesan = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'hapus') {
+    csrf_check();
+    db_query('DELETE FROM highlight WHERE id = ?', [(int) ($_POST['id'] ?? 0)]);
+    $pesan = 'Berhasil hapus data';
 }
-if ($op == 'delete') {
-    $id = $_GET['id'];
-    $sql1   = "delete from highlight where id = '$id'";
-    $q1     = mysqli_query($koneksi, $sql1);
-    if ($q1) {
-        $sukses     = "Berhasil hapus data";
-    }
+
+$where  = '';
+$params = [];
+if ($katakunci !== '') {
+    $where  = ' WHERE (judul LIKE ? OR kategori LIKE ? OR isi LIKE ?)';
+    $params = array_fill(0, 3, '%' . $katakunci . '%');
 }
+
+$per_halaman = 10;
+$total  = (int) db_one('SELECT COUNT(*) AS n FROM highlight' . $where, $params)['n'];
+$pages  = max(1, (int) ceil($total / $per_halaman));
+$page   = min(max(1, (int) ($_GET['page'] ?? 1)), $pages);
+$mulai  = ($page - 1) * $per_halaman;
+
+$rows = db_all(
+    'SELECT * FROM highlight' . $where . ' ORDER BY id DESC LIMIT ' . (int) $mulai . ',' . (int) $per_halaman,
+    $params
+);
+$nomor = $mulai + 1;
 ?>
 <h1>Halaman Admin</h1>
 <p>
-    <a href="halaman_input.php">
-        <input type="button" class="btn btn-primary" value="Buat Halaman Baru" />
-    </a>
+    <a href="halaman_input.php"><input type="button" class="btn btn-primary" value="Buat Halaman Baru" /></a>
 </p>
-<?php
-if ($sukses) {
-?>
-<div class="alert alert-primary" role="alert">
-    <?php echo $sukses ?>
-</div>
-<?php
-}
-?>
+<?php if ($pesan): ?>
+<div class="alert alert-primary" role="alert"><?= e($pesan) ?></div>
+<?php endif; ?>
 <form class="row g-3" method="get">
     <div class="col-auto">
         <input type="text" class="form-control" placeholder="Masukan Kata Kunci" name="katakunci"
-            value="<?php echo $katakunci?>" />
+            value="<?= e($katakunci) ?>" />
     </div>
     <div class="col-auto">
         <input type="submit" name="cari" value="Cari Tulisan" class="btn btn-secondary" />
@@ -48,73 +52,48 @@ if ($sukses) {
             <th>Judul</th>
             <th>Kategori</th>
             <th>Isi</th>
-            <th class="col-2">Aksi </th>
+            <th class="col-2">Aksi</th>
         </tr>
     </thead>
     <tbody>
-        <?php 
-        $sqltambahan = "";
-        $per_halaman = 10;
-        if ($katakunci != '') {
-            $array_katakunci = explode(" ", $katakunci);
-            for ($x = 0; $x < count($array_katakunci); $x++) {
-                $sqlcari[] = "(judul like '%" . $array_katakunci[$x] . "%' or kategori like '%" . $array_katakunci[$x] . "%' or isi like '%" . $array_katakunci[$x] . "%')";
-            }
-            $sqltambahan    = " where " . implode(" or ", $sqlcari);
-        }
-        $sql1  = "select * from highlight $sqltambahan";
-        $page   = isset($_GET['page'])?(int)$_GET['page']:1;
-        $mulai  = ($page > 1) ? ($page * $per_halaman) - $per_halaman : 0;
-        $q1     = mysqli_query($koneksi,$sql1);
-        $total  = mysqli_num_rows($q1);
-        $pages  = ceil($total / $per_halaman);
-        $nomor  = $mulai + 1;
-        $sql1   = $sql1." order by id desc limit $mulai,$per_halaman";
-
-        $q1    = mysqli_query($koneksi,$sql1);
-       
-        while($r1 = mysqli_fetch_array($q1)) {
-            ?>
+        <?php foreach ($rows as $r1): ?>
         <tr>
-            <td><?php echo $nomor++ ?></td>
-            <td><?php echo $r1['gambar']; ?></td>
-            <td><?php echo $r1['judul']; ?></td>
-            <td><?php echo $r1['kategori']; ?></td>
-            <td><?php echo $r1['isi']; ?></td>
+            <td><?= $nomor++ ?></td>
+            <td><?= e($r1['gambar']) ?></td>
+            <td><?= e($r1['judul']) ?></td>
+            <td><?= e($r1['kategori']) ?></td>
+            <td><?= e(ringkas($r1['isi'], 120)) ?></td>
             <td>
-                <a href="halaman_input.php?id=<?php echo $r1['id']?>">
+                <a href="halaman_input.php?id=<?= (int) $r1['id'] ?>">
                     <span class="badge bg-warning text-dark">Edit</span>
                 </a>
-
-                <a href="halaman.php?op=delete&id=<?php echo $r1['id'] ?>"
-                    onclick="return confirm('Apakah anda ingin menhapus data ini?')">
-                    <span class="badge bg-danger">Delete</span>
-                </a>
+                <form method="post" class="d-inline"
+                    onsubmit="return confirm('Apakah anda ingin menghapus data ini?')">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="aksi" value="hapus">
+                    <input type="hidden" name="id" value="<?= (int) $r1['id'] ?>">
+                    <button type="submit" class="badge bg-danger border-0">Delete</button>
+                </form>
             </td>
         </tr>
-        <?php
-        }
-        ?>
-
+        <?php endforeach; ?>
+        <?php if (!$rows): ?>
+        <tr>
+            <td colspan="6" class="text-center">Data tidak ditemukan.</td>
+        </tr>
+        <?php endif; ?>
     </tbody>
 </table>
 
-<nav aria-label="Page navigation example">
+<nav aria-label="Navigasi halaman">
     <ul class="pagination">
-        <?php 
-        $cari = isset($_GET['cari'])? $_GET['cari'] : "";
-
-        for($i=1; $i <= $pages; $i++){
-            ?>
-        <li class="page-item">
+        <?php for ($i = 1; $i <= $pages; $i++): ?>
+        <li class="page-item <?= $i === $page ? 'active' : '' ?>">
             <a class="page-link"
-                href="halaman.php?katakunci=<?php echo $katakunci?>&cari=<?php echo $cari?>&page=<?php echo $i ?>"><?php echo $i ?></a>
+                href="halaman.php?katakunci=<?= urlencode($katakunci) ?>&page=<?= $i ?>"><?= $i ?></a>
         </li>
-        <?php
-        }
-        ?>
+        <?php endfor; ?>
     </ul>
-    <button class="btn btn-danger" onclick="window.print()">download</button>
 </nav>
 
-<?php include("inc_footer.php") ?>
+<?php include 'inc_footer.php'; ?>

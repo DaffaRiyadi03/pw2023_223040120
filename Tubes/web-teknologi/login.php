@@ -1,89 +1,58 @@
 <?php
-session_start();
-require 'inc/inc_koneksi.php';
-require 'inc/inc_fungsi.php';
+require_once __DIR__ . '/inc/inc_fungsi.php';
+sesi();
 
-if (isset($_POST["login"])) {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-
-    $result = mysqli_query($koneksi, "SELECT * FROM user WHERE username = '$username'");
-
-    // cek username
-    if (mysqli_num_rows($result) === 1) {
-        // cek password
-        $row = mysqli_fetch_assoc($result);
-        if (password_verify($password, $row["password"])) {
-            // Set session to store user login information
-            $_SESSION['submit'] = true;
-            $_SESSION["user_id"] = $row["id"];
-            $_SESSION["username"] = $row["username"];
-            $_SESSION["role"] = $row["role"];
-
-            if ($row["role"] == 'admin') {
-                // If role is admin (1), redirect to admin page
-                header("Location: admin/halaman.php");
-                exit;
-            } else {
-                // If role is user (0), redirect to user page
-                header("Location: index.php");
-                exit;
-            }
-        }
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_check();
+    $row = db_one('SELECT * FROM user WHERE username = ?', [trim($_POST['username'] ?? '')]);
+    if ($row && password_verify($_POST['password'] ?? '', $row['password'])) {
+        session_regenerate_id(true);
+        $_SESSION = [
+            'user_id'  => $row['id'],
+            'username' => $row['username'],
+            'role'     => $row['role'],
+        ];
+        header('Location: ' . ($row['role'] === 'admin' ? 'admin/halaman.php' : 'index.php'));
+        exit;
     }
-
-    $error = true;
+    $error = 'Username / password salah!';
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Masuk</title>
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS File -->
     <link rel="stylesheet" href="css/login-style.css">
-
 </head>
 
 <body>
-    <!-- Login Form -->
     <div class="container">
         <input type="checkbox" id="check">
         <div class="login form">
             <header>Masuk</header>
             <form action="" method="post">
-                <?php 
-                if (isset($error)):
-                ?>
-                <p style="color:red;">Username / password salah!</p>
+                <?= csrf_field() ?>
+                <?php if ($error): ?>
+                <p style="color:red;"><?= e($error) ?></p>
+                <?php elseif (isset($_GET['daftar'])): ?>
+                <p style="color:green;">Akun berhasil dibuat, silakan masuk.</p>
                 <?php endif; ?>
-                <!-- Added method="POST" to send form data -->
-                <input type="text" name="username" placeholder="Masukkan username">
-                <input type="password" name="password" placeholder="Masukkan password">
+                <input type="text" name="username" placeholder="Masukkan username" required>
+                <input type="password" name="password" placeholder="Masukkan password" required>
                 <input type="submit" class="button" name="login" value="Masuk">
-                <!-- Changed type to "submit" and added name="login" -->
             </form>
             <div class="signup">
-                <span class="signup">Belum punya akun?
-                    <a href="registrasi.php ">
-                        daftar
-                    </a>
-
-                </span>
+                <span class="signup">Belum punya akun? <a href="registrasi.php">daftar</a></span>
             </div>
         </div>
-        <!-- End of Login Form -->
-
+    </div>
 </body>
 
 </html>

@@ -1,115 +1,27 @@
-<?php 
-session_start();
+<?php
+require_once __DIR__ . '/inc/inc_layout.php';
 
-if(!isset($_SESSION["submit"])) {
-header("Location: login.php");
-exit;
+$id   = (int) ($_GET['id'] ?? 0);
+$data = $id ? db_one('SELECT * FROM highlight WHERE id = ?', [$id]) : null;
 
+if (!$data) {
+    http_response_code(404);
+    layout_head('Artikel tidak ditemukan');
+    echo '<div class="container py-5"><p>Artikel tidak ditemukan.</p><a href="index.php">&laquo; Kembali ke beranda</a></div>';
+    layout_foot();
+    exit;
 }
 
-include_once("inc/inc_koneksi.php");
-include_once("inc/inc_fungsi.php");
-
-if(isset($_GET['judul'])){
-  $judul = htmlspecialchars($_GET['judul']);
-  $queryHighlight = mysqli_query($koneksi, "SELECT * FROM highlight WHERE judul='$judul'");
-  $data = mysqli_fetch_array($queryHighlight);
-} else {
-  // Tambahkan penanganan jika parameter judul tidak tersedia dalam URL
-  echo "Judul tidak tersedia.";
-  exit;
-}
-
+layout_head($data['judul']);
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-
-    <!-- My CSS -->
-    <link rel="stylesheet" href="css/style.css" />
-
-</head>
-
-<body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container">
-            <a class="navbar-brand" href="index.php"><span>D.R</span> Tech</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse position-absolute top-50 start-50 translate-middle mt-0"
-                id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link fw-bolder" href="index.php"></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-bolder" href="populer.php"></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-bolder" href="terbaru.php"></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- Akhir Navbar -->
-    <br />
-
-    <!-- Isi Artikel -->
-    <div class="container text-center">
-        <div class="row">
-            <div class="col">
-                <div class="container">
-                    <img src="gambar/<?php echo $data['gambar'] ?>" class="img-fluid" alt="..."
-                        style="width: 100%; height: 400px; align-self: center;" />
-                </div>
-            </div>
-        </div>
-        <br>
-        <hr>
-        <br>
-
-        <div class="container text-center">
-            <div class="judul" style="text-align: start;">
-                <h2><?php echo $data['judul'] ?></h2>
-                <p class="lead"><?php echo $data['kategori'] ?> | <?php echo $data['tgl_upload'] ?></p>
-            </div>
-            <br>
-            <p style="text-align: justify;">
-                <?php echo $data['isi'] ?>
-            </p>
-
-        </div>
+<article class="container py-4">
+    <img src="gambar/<?= e($data['gambar']) ?>" class="img-fluid w-100" style="height: 400px; object-fit: cover;"
+        alt="<?= e($data['judul']) ?>" />
+    <hr>
+    <h2><?= e($data['judul']) ?></h2>
+    <p class="lead text-muted"><?= e($data['kategori']) ?> | <?= e($data['tgl_upload']) ?></p>
+    <div style="text-align: justify;">
+        <?= $data['isi'] /* HTML dari Summernote; hanya admin yang bisa menulis, sengaja tidak di-escape */ ?>
     </div>
-
-    <!-- Akhir Artikel -->
-
-    <!-- Footer -->
-    <footer class="bg-light text-center text-lg-start">
-        <div class="text-center p-3" style="background-color: white;">
-            © 2023 Muhammad Daffa Riyadi
-        </div>
-    </footer>
-    <!-- Akhir Footer -->
-
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-pzjw4cvC2U4Oo5QRI8CmsOyhC9cFuOHqzHHPgNLz5+RyJcwAIOwBfLrzKaMrDH7z" crossorigin="anonymous">
-    </script>
-
-</body>
-
-</html>
+</article>
+<?php layout_foot(); ?>

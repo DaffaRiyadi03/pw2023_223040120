@@ -1,13 +1,8 @@
 <?php
-$files = array_filter(glob('../gambar/*'), 'is_file');
+require_once __DIR__ . '/../inc/inc_fungsi.php';
+admin_saja();
 
-$response = [];
-
-foreach ($files as $file) {
-	$response[] = basename($file);
-}
+$files = array_filter(glob(__DIR__ . '/../gambar/*'), 'is_file');
 
 header('Content-Type: application/json');
-echo json_encode($response);
-die();
-?>
+echo json_encode(array_values(array_map('basename', $files)));

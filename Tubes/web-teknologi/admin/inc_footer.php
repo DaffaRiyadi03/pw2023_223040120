@@ -1,8 +1,6 @@
 </main>
 <footer class="bg-light">
-    <div class="text-center p-3" style="backgorud:#cccccc">
-        Copyright & copy 2022
-    </div>
+    <div class="text-center p-3">&copy; <?= date('Y') ?> Muhammad Daffa Riyadi</div>
 </footer>
 <script>
 $(document).ready(function() {
@@ -28,8 +26,8 @@ $(document).ready(function() {
         dialogsInBody: true,
         imageList: {
             endpoint: "daftar_gambar.php",
-            fullUrlPrefix: ".../gambar/",
-            thumbUrlPrefix: ".../gambar/"
+            fullUrlPrefix: "../gambar/",
+            thumbUrlPrefix: "../gambar/"
         }
     });
     $.upload = function(file) {
@@ -38,7 +36,7 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'POST',
-            url: 'daftar_gambar.php',
+            url: 'upload_gambar.php',
             contentType: false,
             cache: false,
             processData: false,
@@ -47,7 +45,7 @@ $(document).ready(function() {
                 $('#summernote').summernote('insertImage', img);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error(textStatus + " " + errorThrown);
+                alert('Upload gambar gagal: ' + (jqXHR.responseText || textStatus));
             }
         });
     };

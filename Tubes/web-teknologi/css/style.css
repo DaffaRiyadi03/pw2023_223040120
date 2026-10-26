@@ -2,25 +2,22 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  outline: none;
-  border: none;
-  text-decoration: none;
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
   background-color: whitesmoke;
+  padding-top: 76px; /* navbar fixed */
 }
 
-div {
-  display: block;
-}
-
-nav {
+nav.navbar {
   background-color: white;
-  border-color: none;
   position: fixed;
-  font-size: 1.2 rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  font-size: 1.1rem;
 }
 
 nav a span {
@@ -29,19 +26,15 @@ nav a span {
 
 .jumbotron {
   padding: 2rem 1rem;
-  margin: 10px 10px;
-  position: relative;
+  margin: 10px;
   background: url("../gambar/BG-JUMBOTRON.jpg") center center;
-  width: auto;
-  height: auto;
   background-size: cover;
   overflow: hidden;
   font-weight: 500;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
-.d-flex {
-  padding: 2rem 0rem;
+.jumbotron .d-flex {
+  padding: 2rem 0;
 }
 
 .display-4 {
@@ -50,11 +43,4 @@ nav a span {
 
 hr {
   margin: 0 10px;
-}
-
-.img-fluid rounded-start {
-  position: relative;
-  text-align: center;
-  overflow: hidden;
-  display: block;
 }
