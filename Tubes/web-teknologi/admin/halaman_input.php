@@ -1,25 +1,34 @@
-<?php require 'inc_header.php'; ?>
 <?php
-$id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
+require_once __DIR__ . '/../inc/inc_fungsi.php';
+wajib_admin('../login.php');
+
+// Semua logika (termasuk header redirect) dijalankan sebelum ada output HTML.
+$id      = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $gambar = $judul = $kategori = $isi = '';
 $error = '';
 $sukses = isset($_GET['ok']) ? 'Sukses menyimpan data' : '';
+$tidak_ada = false;
 
 if ($id) {
     $row = db_one('SELECT * FROM highlight WHERE id = ?', [$id]);
-    if ($row) {
-        ['gambar' => $gambar, 'judul' => $judul, 'kategori' => $kategori, 'isi' => $isi] = $row;
-    } else {
+    if (!$row) {
+        http_response_code(404);
+        $tidak_ada = true;
         $error = 'Data tidak ditemukan';
+    } else {
+        ['gambar' => $gambar, 'judul' => $judul, 'kategori' => $kategori, 'isi' => $isi] = $row;
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$tidak_ada) {
     csrf_check();
-    $judul    = trim($_POST['judul'] ?? '');
-    $kategori = trim($_POST['kategori'] ?? '');
-    $isi      = $_POST['isi'] ?? '';
-    $gambar   = $_POST['gambar_lama'] ?? ''; // default: pertahankan gambar lama
+    $judul    = trim((string) ($_POST['judul'] ?? ''));
+    $kategori = trim((string) ($_POST['kategori'] ?? ''));
+    // Editor ada di /admin, jadi Summernote menulis src="../gambar/...". Halaman publik
+    // ada di root, jadi simpan versi root-relatif supaya gambarnya tidak 404.
+    $isi      = str_replace('../gambar/', 'gambar/', (string) ($_POST['isi'] ?? ''));
+    $gambar_lama = basename((string) ($_POST['gambar_lama'] ?? ''));
+    $gambar   = $gambar_lama; // default: pertahankan gambar lama
 
     if ($judul === '' || $isi === '') {
         $error = 'Silahkan masukan judul dan isi.';
@@ -27,35 +36,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $file = $_FILES['gambar'] ?? null;
     if (!$error && $file && $file['error'] === UPLOAD_ERR_OK) {
-        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'], true)) {
-            $error = 'Format gambar harus JPG/PNG/WEBP/GIF.';
-        } elseif ($file['size'] > 5 * 1024 * 1024) {
-            $error = 'Ukuran gambar maksimal 5 MB.';
-        } elseif (!@getimagesize($file['tmp_name'])) {
-            $error = 'File yang diunggah bukan gambar.';
-        } else {
-            $nama = bin2hex(random_bytes(8)) . '.' . $ext;
-            if (move_uploaded_file($file['tmp_name'], __DIR__ . '/../gambar/' . $nama)) {
-                $gambar = $nama;
-            } else {
-                $error = 'Gagal menyimpan gambar.';
-            }
+        try {
+            $gambar = simpan_gambar($file);
+        } catch (RuntimeException $e) {
+            $error = $e->getMessage();
         }
     }
 
     if (!$error) {
         if ($id) {
+            // tgl_upload sengaja tidak diubah: tanggal terbit asli dipertahankan.
             db_query(
-                'UPDATE highlight SET gambar = ?, judul = ?, kategori = ?, isi = ?, tgl_upload = CURDATE() WHERE id = ?',
-                [$gambar, $judul, $kategori, $isi, $id]
+                'UPDATE highlight SET gambar = ?, judul = ?, kategori = ?, isi = ?, isi_teks = ? WHERE id = ?',
+                [$gambar, $judul, $kategori, $isi, teks_polos($isi), $id]
             );
         } else {
             db_query(
-                'INSERT INTO highlight (gambar, judul, kategori, isi, tgl_upload) VALUES (?, ?, ?, ?, CURDATE())',
-                [$gambar, $judul, $kategori, $isi]
+                'INSERT INTO highlight (gambar, judul, kategori, isi, isi_teks, tgl_upload)
+                 VALUES (?, ?, ?, ?, ?, CURDATE())',
+                [$gambar, $judul, $kategori, $isi, teks_polos($isi)]
             );
             $id = mysqli_insert_id(db());
+        }
+        if ($gambar !== $gambar_lama) {
+            hapus_gambar($gambar_lama); // cover lama tidak dipakai lagi
         }
         header('Location: halaman_input.php?id=' . $id . '&ok=1');
         exit;
@@ -63,60 +67,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $kategoriList = db_all('SELECT DISTINCT kategori FROM highlight ORDER BY kategori');
+
+// Editor ada di /admin, jadi tampilkan path relatif editor; saat simpan dinormalisasi
+// balik ke 'gambar/...' supaya valid juga di halaman publik.
+$isi = str_replace('src="gambar/', 'src="../gambar/', $isi);
+
+require __DIR__ . '/inc_header.php';
 ?>
-<h1>Halaman Admin Input Data</h1>
-<div class="mb-3 row">
-    <a href="halaman.php">&lt;&lt; Kembali ke halaman admin</a>
+<div class="page-head">
+    <div>
+        <p class="kicker"><?= $tidak_ada ? 'Tidak ditemukan' : ($id ? 'Sunting artikel' : 'Artikel baru') ?></p>
+        <h1><?= $tidak_ada ? 'Artikel tidak ditemukan' : ($id ? 'Sunting artikel' : 'Artikel baru') ?></h1>
+        <p><?= $tidak_ada ? 'Artikel yang kamu maksud mungkin sudah dihapus.' : ($id ? 'Perbarui judul, kategori, isi, atau gambar sampul.' : 'Tulis artikel baru untuk portal D.R Tech.') ?>
+        </p>
+    </div>
+    <a class="btn-ghost btn-xs" href="halaman.php">&larr; Kembali</a>
 </div>
+
 <?php if ($error): ?>
-<div class="alert alert-danger" role="alert"><?= e($error) ?></div>
+<div class="alert-line err" role="alert"><?= e($error) ?></div>
 <?php endif; ?>
 <?php if ($sukses): ?>
-<div class="alert alert-primary" role="alert"><?= e($sukses) ?></div>
+<div class="alert-line ok" role="status"><?= e($sukses) ?></div>
 <?php endif; ?>
 
-<form action="" method="post" enctype="multipart/form-data">
+<?php if (!$tidak_ada): ?>
+<form class="card-panel form-card" action="" method="post" enctype="multipart/form-data">
     <?= csrf_field() ?>
     <input type="hidden" name="id" value="<?= (int) $id ?>">
     <input type="hidden" name="gambar_lama" value="<?= e($gambar) ?>">
-    <div class="mb-3 row">
-        <label for="judul" class="col-sm-2 col-form-label">Judul</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="judul" value="<?= e($judul) ?>" name="judul">
+
+    <div class="form-inner">
+        <div class="form-grid">
+            <div class="field">
+                <label for="judul">Judul</label>
+                <input type="text" class="form-control" id="judul" value="<?= e($judul) ?>" name="judul"
+                    placeholder="Judul yang jelas dan spesifik" required>
+            </div>
+            <div class="field">
+                <label for="kategori">Kategori</label>
+                <input type="text" class="form-control" id="kategori" value="<?= e($kategori) ?>" name="kategori"
+                    list="daftar-kategori" placeholder="mis. Website, AI, Hardware">
+                <datalist id="daftar-kategori">
+                    <?php foreach ($kategoriList as $k): ?>
+                    <option value="<?= e($k['kategori']) ?>">
+                    <?php endforeach; ?>
+                </datalist>
+                <p class="note">Pilih atau tulis baru</p>
+            </div>
         </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="kategori" value="<?= e($kategori) ?>" name="kategori"
-                list="daftar-kategori">
-            <datalist id="daftar-kategori">
-                <?php foreach ($kategoriList as $k): ?>
-                <option value="<?= e($k['kategori']) ?>">
-                <?php endforeach; ?>
-            </datalist>
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="isi" class="col-sm-2 col-form-label">Isi</label>
-        <div class="col-sm-10">
+
+        <div class="field">
+            <label for="summernote">Isi artikel</label>
             <textarea name="isi" class="form-control" id="summernote"><?= e($isi) ?></textarea>
         </div>
-    </div>
 
-    <div class="mb-3 row">
-        <label for="gambar" class="col-sm-2 col-form-label">Gambar</label>
-        <div class="col-sm-10">
-            <?php if ($gambar): ?>
-            <img src="../gambar/<?= e($gambar) ?>" style="max-height:100px;max-width:100px" alt="">
-            <?php endif; ?>
-            <input class="form-control" name="gambar" type="file" id="gambar" accept="image/*">
+        <div class="field">
+            <label for="gambar">Gambar sampul</label>
+            <div class="upload-row">
+                <?php if ($gambar): ?>
+                <img class="thumb-lg" src="../gambar/<?= e($gambar) ?>" alt="Gambar saat ini">
+                <?php endif; ?>
+                <input class="form-control" name="gambar" type="file" id="gambar" accept="image/*">
+            </div>
+            <p class="note">JPG, PNG, WEBP, atau GIF · maks 5 MB · kosongkan untuk mempertahankan gambar lama</p>
         </div>
     </div>
 
-    <div class="col-sm-10">
-        <input type="submit" name="simpan" value="Simpan Data" class="btn btn-primary" />
+    <div class="form-actions">
+        <a class="btn-ghost" href="halaman.php">Batal</a>
+        <button type="submit" name="simpan" class="btn-accent">Simpan artikel</button>
     </div>
 </form>
+<?php endif; ?>
 
 <?php include 'inc_footer.php'; ?>

@@ -2,6 +2,13 @@
 require_once __DIR__ . '/inc/inc_fungsi.php';
 sesi();
 
+// POST + CSRF: logout lewat GET bisa dipicu situs lain lewat <img>.
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: index.php');
+    exit;
+}
+csrf_check();
+
 $_SESSION = [];
 if (ini_get('session.use_cookies')) {
     $p = session_get_cookie_params();

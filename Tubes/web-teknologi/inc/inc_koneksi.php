@@ -18,9 +18,10 @@ function db(): mysqli
             $koneksi = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
             mysqli_set_charset($koneksi, 'utf8mb4');
         } catch (mysqli_sql_exception $e) {
+            // Detail hanya ke log server; jangan bocorkan kredensial/path ke browser.
+            error_log('Koneksi database gagal: ' . $e->getMessage());
             http_response_code(500);
-            exit('Koneksi database gagal: ' . $e->getMessage()
-                . ' (cek DB_HOST/DB_PORT/DB_NAME di inc/inc_koneksi.php)');
+            exit('Koneksi database gagal. Cek DB_HOST/DB_PORT/DB_NAME di inc/inc_koneksi.php.');
         }
     }
     return $koneksi;

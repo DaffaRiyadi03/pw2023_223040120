@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../inc/inc_fungsi.php';
 wajib_admin('../login.php');
+$halaman = basename($_SERVER['PHP_SELF'] ?? '');
+$user = (string) ($_SESSION['username'] ?? '');
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -23,50 +25,37 @@ wajib_admin('../login.php');
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
         integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style.css">
 
-    <style>
-    .image-list-content .col-lg-3 {
-        width: 100%;
-    }
-
-    .image-list-content img {
-        float: left;
-        width: 20%;
-    }
-
-    .image-list-content p {
-        float: left;
-        padding-left: 20px;
-    }
-
-    .image-list-item {
-        padding: 10px 0px 10px 0px;
-    }
-    </style>
-
-    <title>Admin D.R Tech</title>
+    <title>Admin — D.R Tech</title>
 </head>
 
-<body class="container">
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="halaman.php">D.R Tech Admin</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="../index.php">Lihat Situs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../logout.php">Logout</a>
-                        </li>
-                    </ul>
+<body>
+    <nav class="navbar navbar-expand-lg admin-nav">
+        <div class="wrap">
+            <a class="brand" href="halaman.php"><span class="brand-mark" aria-hidden="true"></span><span
+                    class="wordmark">D.R Tech</span><span class="admin-tag">Admin</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navAdmin"
+                aria-controls="navAdmin" aria-expanded="false" aria-label="Buka menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navAdmin">
+                <ul class="navbar-nav nav-links">
+                    <li class="nav-item">
+                        <a class="nav-link <?= $halaman === 'halaman.php' ? 'active' : '' ?>"
+                            href="halaman.php">Artikel</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="../index.php">Lihat situs</a></li>
+                </ul>
+                <div class="admin-user">
+                    <span class="user-chip"><?= e($user) ?></span>
+                    <span class="admin-avatar" aria-hidden="true"><?= e(mb_substr($user, 0, 1)) ?></span>
+                    <form method="post" action="../logout.php" class="nav-logout">
+                        <?= csrf_field() ?>
+                        <button type="submit" class="btn-logout">Keluar</button>
+                    </form>
                 </div>
             </div>
-        </nav>
-    </header>
-    <main class="py-3">
+        </div>
+    </nav>
+    <main class="admin-shell">
